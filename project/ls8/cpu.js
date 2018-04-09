@@ -71,9 +71,9 @@ class CPU {
         
         // !!! IMPLEMENT ME
         const PC = this.reg.PC;
-        const IR = read(PC);
+        const IR = this.ram.read(PC);
         // Debugging output
-        //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+        console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
@@ -86,22 +86,117 @@ class CPU {
 
         // !!! IMPLEMENT ME
         const instruction = {};
-        if (IR[0] === '0' && IR[1] === '0') {
-            instruction.numOfOperands = 0;
+        // if (IR[0] === '0' && IR[1] === '0') {
+        //     instruction.numOfOperands = 0;
+        // }
+        // if (IR[0] === '0' && IR[1] === '1') {
+        //     instruction.numOfOperands = 1;
+        // }
+        // if (IR[0] === '1' && IR[1] === '0') {
+        //     instruction.numOfOperands = 2;
+        // }
+        const opIndex = {
+            '10101000': () => {
+                console.log("The ADD operation logic will go here!");
+            },
+            '10110011': () => {
+                console.log("The AND operation logic will go here!");
+            },
+            '01001000': () => {
+                console.log("The CALL operation logic will go here!");
+            },
+            '10100000': () => {
+                console.log("The CMP operation logic will go here!");
+            },
+            '01111001': () => {
+                console.log("The DEC operation logic will go here!");
+            },
+            '10101011': () => {
+                console.log("The DIV operation logic will go here!");
+            },
+            '00000001': () => {
+                console.log("The HLT operation logic will go here!");
+            },
+            '01111000': () => {
+                console.log("The INC operation logic will go here!");
+            },
+            '01001010': () => {
+                console.log("The INT operation logic will go here!");
+            },
+            '00001011': () => {
+                console.log("The IRET operation logic will go here!");
+            },
+            '01010001': () => {
+                console.log("The JEQ operation logic will go here!");
+            },
+            '01010100': () => {
+                console.log("The JGT operation logic will go here!");
+            },
+            '01010011': () => {
+                console.log("The JLT operation logic will go here!");
+            },
+            '01010000': () => {
+                console.log("The JMP operation logic will go here!");
+            },
+            '01010010': () => {
+                console.log("The JNE operation logic will go here!");
+            },
+            '10011000': () => {
+                console.log("The LD operation logic will go here!");
+            },
+            '10011001': () => {
+                console.log("The LDI operation logic will go here!");
+            },
+            '10101100': () => {
+                console.log("The MOD operation logic will go here!");
+            },
+            '10101010': () => {
+                console.log("The MUL operation logic will go here!");
+            },
+            '00000000': () => {
+                console.log("The NOP operation logic will go here!");
+            },
+            '01110000': () => {
+                console.log("The NOT operation logic will go here!");
+            },
+            '10110001': () => {
+                console.log("The OR operation logic will go here!");
+            },
+            '01001100': () => {
+                console.log("The POP operation logic will go here!");
+            },
+            '01000010': () => {
+                console.log("The PRA operation logic will go here!");
+            },
+            '01000011': () => {
+                console.log("The PRN operation logic will go here!");
+            },
+            '01001101': () => {
+                console.log("The PUSH operation logic will go here!");
+            },
+            '00001001': () => {
+                console.log("The RET operation logic will go here!");
+            },
+            '10011010': () => {
+                console.log("The ST operation logic will go here!");
+            },
+            '10101001': () => {
+                console.log("The SUB operation logic will go here!");
+            },
+            '10110010': () => {
+                console.log("The XOR operation logic will go here!");
+            },
         }
-        if (IR[0] === '0' && IR[1] === '1') {
-            instruction.numOfOperands = 1;
-        }
-        if (IR[0] === '1' && IR[1] === '0') {
-            instruction.numOfOperands = 2;
-        }
+        opIndex[IR.toString(2)]();
+        console.log("We 'carried out' an op");
         
         // Increment the PC register to go to the next instruction. Instructions
         // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
         // instruction byte tells you how many bytes follow the instruction byte
         // for any particular instruction.
-        this.reg.PC += instruction.numOfOperands;
+        
         // !!! IMPLEMENT ME
+        this.reg.PC += instruction.numOfOperands;
     }
 }
 

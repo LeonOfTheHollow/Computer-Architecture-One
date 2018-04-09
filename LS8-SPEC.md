@@ -1,5 +1,6 @@
 # LS-8 Microcomputer Spec v3.0
 
+
 ## Registers
 
 8 general-purpose 8-bit numeric registers R0-R7.
@@ -140,6 +141,8 @@ Glossary:
 * `00000rrr`: Register number
 * `00000aaa`: Register number
 * `00000bbb`: Register number
+
+* 10101 : Math
 
 ### ADD
 
