@@ -53,10 +53,28 @@ class CPU {
      * op can be: ADD SUB MUL DIV INC DEC CMP
      */
     alu(op, regA, regB) {
+        const firstVal = this.reg[regA];
+        const secondVal = this.reg[regB];
+
         switch (op) {
+            case 'ADD':
+                return this.reg[regA] = firstVal + secondVal;
+            case 'DEC':
+                return this.reg[regA] = this.reg[regA] - 1;
+            case 'DIV':
+                if (firstVal || secondVal === 0){
+                   return this.reg[regA] = 0;
+                } else {
+                    this.reg[regA] = firstVal / secondVal;
+                }
+            case 'INC':
+                return this.reg[regA] = this.reg[regA] + 1;
+            case 'MOD':
+                return this.reg[regA] = firstVal % secondVal;
             case 'MUL':
-                // !!! IMPLEMENT ME
-                break;
+                return this.reg[regA] = firstVal * secondVal;
+            case 'SUB':
+                return this.reg[regA] = firstVal - secondVal;
         }
     }
 
@@ -69,10 +87,8 @@ class CPU {
         // index into memory of the instruction that's about to be executed
         // right now.)
 
-        this.reg.IR = this.ram[this.reg.PC]
-
         // !!! IMPLEMENT ME
-
+        const IR = this.ram[this.reg.PC]
         // Debugging output
         //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
@@ -83,6 +99,14 @@ class CPU {
 
 
         // !!! IMPLEMENT ME
+        let numOfOperands;
+        if (IR[0] === "0" && IR[1] === 0){
+            numOfOperands = 0;
+        } else if (IR[0] === "0" && IR[1] === "1"){
+            numOfOperands = 1;
+        } else if (IR[0] === "1" && IR[1] === "1"){
+            numOfOperands = 2;
+        } 
 
         // Execute the instruction. Perform the actions for the instruction as
         // outlined in the LS-8 spec.
