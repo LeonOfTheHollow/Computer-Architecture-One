@@ -68,9 +68,10 @@ class CPU {
         // from the memory address pointed to by the PC. (I.e. the PC holds the
         // index into memory of the instruction that's about to be executed
         // right now.)
-
+        
         // !!! IMPLEMENT ME
-
+        const PC = this.reg.PC;
+        const IR = read(PC);
         // Debugging output
         //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
@@ -78,17 +79,28 @@ class CPU {
         // needs them.
 
         // !!! IMPLEMENT ME
-
+        const operandA = this.reg[PC+1];
+        const operandB = this.reg[PC+2];
         // Execute the instruction. Perform the actions for the instruction as
         // outlined in the LS-8 spec.
 
         // !!! IMPLEMENT ME
-
+        const instruction = {};
+        if (IR[0] === '0' && IR[1] === '0') {
+            instruction.numOfOperands = 0;
+        }
+        if (IR[0] === '0' && IR[1] === '1') {
+            instruction.numOfOperands = 1;
+        }
+        if (IR[0] === '1' && IR[1] === '0') {
+            instruction.numOfOperands = 2;
+        }
+        
         // Increment the PC register to go to the next instruction. Instructions
         // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
         // instruction byte tells you how many bytes follow the instruction byte
         // for any particular instruction.
-        
+        this.reg.PC += instruction.numOfOperands;
         // !!! IMPLEMENT ME
     }
 }
