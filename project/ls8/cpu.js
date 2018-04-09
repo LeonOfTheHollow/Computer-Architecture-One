@@ -69,6 +69,8 @@ class CPU {
         // index into memory of the instruction that's about to be executed
         // right now.)
 
+        this.reg.IR = this.ram[this.reg.PC]
+
         // !!! IMPLEMENT ME
 
         // Debugging output
@@ -76,6 +78,9 @@ class CPU {
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
+        const operandA = this.ram.read(this.reg.pc + 1);
+        const operandB = this.ram.read(this.reg.pc + 2);
+
 
         // !!! IMPLEMENT ME
 
