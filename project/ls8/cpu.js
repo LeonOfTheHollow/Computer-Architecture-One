@@ -71,7 +71,7 @@ class CPU {
         
         // !!! IMPLEMENT ME
         const PC = this.reg.PC;
-        let IR = this.ram.read(PC);
+        const IR = this.ram.read(PC);
         console.log("The IR fetched from the top of the RAM stack was ", IR.toString(2));
         // Debugging output
         console.log(`${this.reg.PC}: ${IR.toString(2)}`);
@@ -87,10 +87,10 @@ class CPU {
         const LDI = 0b10011001;
         const HLT = 0b00000001;
         const PRN = 0b01000011;
+        const MUL = 0b10101010;
 
         const execute_LDI = () => {
             console.log("The LDI operation is about to run!");
-            console.log("The registers are: ", this.reg);
             this.reg[operandA] = operandB;
         };
         const execute_HLT = () => {
@@ -99,11 +99,16 @@ class CPU {
         const execute_PRN = () => {
             console.log(this.reg[operandA]);
         };
+        const execute_MUL = () => {
+            
+        }
 
         const opIndex = [];
         opIndex[LDI] = execute_LDI;
         opIndex[HLT] = execute_HLT;
         opIndex[PRN] = execute_PRN;
+        opIndex[MUL] = execute_MUL;
+
 
         opIndex[IR]();
 
