@@ -122,7 +122,8 @@ class CPU {
             console.log(this.reg[operandA]);
         };
         const execute_MUL = () => {
-            
+            console.log(`MUL is executing!`);
+            this.alu(`MUL`);
         }
 
         const opIndex = [];
