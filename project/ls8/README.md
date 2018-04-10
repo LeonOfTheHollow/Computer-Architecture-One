@@ -91,7 +91,7 @@ instruction per the LS-8 spec. Maybe a `switch` statement...? Plenty of options.
 After the handler returns, the `PC` needs to be updated to point to the next
 instruction for the next iteration of `tick()`. The number of bytes an
 instruction uses can be determined from the two high bits (bits 6-7) of the
-instruction opcode. See the LS-8 spec for details.
+instruction opcode. See the LS-8 spec for details.y
 
 ### Step 3: Implement the `HLT` instruction handler
 

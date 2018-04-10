@@ -65,7 +65,7 @@ class CPU {
                 if (firstVal || secondVal === 0){
                    return this.reg[regA] = 0;
                 } else {
-                    this.reg[regA] = firstVal / secondVal;
+                    return this.reg[regA] = firstVal / secondVal;
                 }
             case 'INC':
                 return this.reg[regA] = this.reg[regA] + 1;
