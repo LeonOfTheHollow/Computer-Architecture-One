@@ -53,10 +53,28 @@ class CPU {
      * op can be: ADD SUB MUL DIV INC DEC CMP
      */
     alu(op, regA, regB) {
+        const firstVal = this.reg[regA];
+        const secondVal = this.reg[regB];
+
         switch (op) {
+            case 'ADD':
+                return this.reg[regA] = firstVal + secondVal;
+            case 'DEC':
+                return this.reg[regA] = this.reg[regA] - 1;
+            case 'DIV':
+                if (firstVal || secondVal === 0){
+                   return this.reg[regA] = 0;
+                } else {
+                    return this.reg[regA] = firstVal / secondVal;
+                }
+            case 'INC':
+                return this.reg[regA] = this.reg[regA] + 1;
+            case 'MOD':
+                return this.reg[regA] = firstVal % secondVal;
             case 'MUL':
-                // !!! IMPLEMENT ME
-                break;
+                return this.reg[regA] = firstVal * secondVal;
+            case 'SUB':
+                return this.reg[regA] = firstVal - secondVal;
         }
     }
 
@@ -70,18 +88,22 @@ class CPU {
         // right now.)
         
         // !!! IMPLEMENT ME
+
         const PC = this.reg.PC;
         const IR = this.ram.read(PC);
         console.log("The IR fetched from the top of the RAM stack was ", IR.toString(2));
+
         // Debugging output
         console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
+        const operandA = this.ram.read(this.reg.pc + 1);
+        const operandB = this.ram.read(this.reg.pc + 2);
+
 
         // !!! IMPLEMENT ME
-        const operandA = this.ram.read(PC+1);
-        const operandB = this.ram.read(PC+2);
+
         // Execute the instruction. Perform the actions for the instruction as
         // outlined in the LS-8 spec.
         const LDI = 0b10011001;
