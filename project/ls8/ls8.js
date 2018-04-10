@@ -14,9 +14,15 @@ function loadMemory() {
         "10011001", // LDI R0,8  Store 8 into R0
         "00000000",
         "00001000",
-        "01000011", // PRN R0    Print the value in R0
+        "10011001", // PRN R0    Print the value in R0
+        "00000001",
+        "00001001",  // HLT       Halt and quit
+        "10101010",
         "00000000",
-        "00000001"  // HLT       Halt and quit
+        "00000001",
+        "01000011",
+        "00000000",
+        "00000001"
     ];
 
     // Load the program into the CPU's memory a byte at a time

@@ -53,8 +53,12 @@ class CPU {
      * op can be: ADD SUB MUL DIV INC DEC CMP
      */
     alu(op, regA, regB) {
+        console.log("Got first registry address: ", regA);
+        console.log("Got second registry address: ", regB);
         const firstVal = this.reg[regA];
+        console.log("ALU got first operand from register: ", firstVal);
         const secondVal = this.reg[regB];
+        console.log("ALU got second operand from register: ", secondVal);
 
         switch (op) {
             case 'ADD':
@@ -98,8 +102,10 @@ class CPU {
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
-        const operandA = this.ram.read(this.reg.pc + 1);
-        const operandB = this.ram.read(this.reg.pc + 2);
+        const operandA = this.ram.read(PC + 1);
+        console.log("Ticker got first operand: ", operandA);
+        const operandB = this.ram.read(PC + 2);
+        console.log("Ticker got second operand: ", operandB);
 
 
         // !!! IMPLEMENT ME
@@ -116,13 +122,16 @@ class CPU {
             this.reg[operandA] = operandB;
         };
         const execute_HLT = () => {
+            console.log("The HLT operation is about to run!");
             this.stopClock();
         };
         const execute_PRN = () => {
-            console.log(this.reg[operandA]);
+            console.log("The PRN operation is about to run!");
+            console.log("Printline output: ", this.reg[operandA]);
         };
         const execute_MUL = () => {
-            
+            console.log("The MUL operation is about to run!");
+            this.alu('MUL', operandA, operandB);
         }
 
         const opIndex = [];
