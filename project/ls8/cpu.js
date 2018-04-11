@@ -2,6 +2,10 @@
  * LS-8 v2.0 emulator skeleton code
  */
 
+const IM = 0x05;  // Interrupt mask register R5
+const IS = 0x06;  // Interrupt status register R6
+const SP = 0x07;  // Stack pointer R7
+
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -14,7 +18,8 @@ class CPU {
         this.ram = ram;
 
         this.reg = new Array(8).fill(0); // General-purpose registers R0-R7
-        
+        //this.reg.SP = this.reg[7];
+        this.reg[SP] = 0xf4;
         // Special-purpose registers
         this.reg.PC = 0; // Program Counter
     }
@@ -95,17 +100,19 @@ class CPU {
 
         const PC = this.reg.PC;
         const IR = this.ram.read(PC);
-        console.log("The IR fetched from the top of the RAM stack was ", IR.toString(2));
+        //console.log("The IR fetched from the top of the RAM stack was ", IR.toString(2));
 
         // Debugging output
+        console.log("\n");
         console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+        //console.log("this.reg.SP is currently: ", this.reg.SP);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
         const operandA = this.ram.read(PC + 1);
-        console.log("Ticker got first operand: ", operandA);
+        console.log("First potential operand: ", operandA.toString(2));
         const operandB = this.ram.read(PC + 2);
-        console.log("Ticker got second operand: ", operandB);
+        console.log("Second potential operand: ", operandB.toString(2));
 
 
         // !!! IMPLEMENT ME
@@ -116,6 +123,8 @@ class CPU {
         const HLT = 0b00000001;
         const PRN = 0b01000011;
         const MUL = 0b10101010;
+        const PUSH = 0b01001101;
+        const POP = 0b01001100;
 
         const execute_LDI = () => {
             console.log("The LDI operation is about to run!");
@@ -133,13 +142,44 @@ class CPU {
             console.log("The MUL operation is about to run!");
             this.alu('MUL', operandA, operandB);
         }
+        const execute_PUSH = () => {
+            console.log("The PUSH operation is about to run. Here is the entire register: ", this.reg);
+            // this.alu('DEC', SP);
+            // this.ram.write(this.reg[SP], operandA)
+            console.log("OpA: ", operandA);
+            console.log("OpB: ", operandB);
+            _pushHelper(this.reg[operandA]);
+        };
+        const _pushHelper = reg => {
+            this.alu('DEC', SP);
+            console.log("About to write to stack at this location: ", this.reg[SP]);
+            this.ram.write(this.reg[SP], this.reg[operandA]);
+            console.log("Wrote to Stack: ", this.ram.read(243));
+        }
+        const execute_POP = () => {
+            console.log("The POP operation is about to run!");
+            // this.reg[operandA] = this.ram.read(this.reg[SP]);
+            // this.alu('INC', SP);
+            console.log("OpA: ", operandA);
+            console.log("OpB: ", operandB);
+            console.log("About to pop to this address: ", operandA);
+            this.reg[operandA] = _popHelper();
+        }
+        const _popHelper = () => {
+            console.log("The contents of the RAM is:", this.ram.mem[243]);
+            const val = this.ram.read(this.reg[SP]);
+            console.log("The value pop retrieved from the stack: ", val);
+            this.alu('INC', SP);
+            return val;
+        }
 
         const opIndex = [];
         opIndex[LDI] = execute_LDI;
         opIndex[HLT] = execute_HLT;
         opIndex[PRN] = execute_PRN;
         opIndex[MUL] = execute_MUL;
-
+        opIndex[PUSH] = execute_PUSH;
+        opIndex[POP] = execute_POP;
 
         opIndex[IR]();
 
@@ -240,7 +280,7 @@ class CPU {
         //         console.log("The XOR operation logic will go here!");
         //     },
         // }
-        console.log("We 'carried out' an op");
+        //console.log("We 'carried out' an op");
         
         // Increment the PC register to go to the next instruction. Instructions
         // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
