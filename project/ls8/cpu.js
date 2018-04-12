@@ -68,8 +68,11 @@ class CPU {
         const HLT = 0b00000001;
         const PRN = 0b01000011;
         const MUL = 0b10101010;
-        const PUSH = 0b01001101;
+        const ADD = 0b10101000;
+        const PUSH= 0b01001101;
         const POP = 0b01001100;
+        const CALL= 0b01001000;
+        const RET = 0b00001001;
 
         const execute_LDI = () => {
             this.reg[operandA] = operandB;
@@ -80,6 +83,9 @@ class CPU {
         const execute_PRN = () => {
             console.log("Printline output: ", this.reg[operandA]);
         };
+        const execute_ADD = () => {
+            this.alu('ADD', operandA, operandB);
+        }
         const execute_MUL = () => {
             this.alu('MUL', operandA, operandB);
         }
@@ -93,6 +99,20 @@ class CPU {
             this.reg[operandA] = val;
             return;
         }
+        const execute_CALL = () => {
+            console.log("About to make a Call elsewhere");
+            this.alu('DEC', SP);
+            const temp = PC + 1;
+            console.log("Is this an address or an instruction? ", temp.toString(2));
+            this.ram.write(this.reg[SP], PC+2);
+            return this.reg[operandA];
+        };
+        const execute_RET = () => {
+            const val = this.ram.read(this.reg[SP]);
+            this.alu('INC', SP);
+            this.reg.PC = val;
+            return val;
+        };
 
         const opIndex = [];
         opIndex[LDI] = execute_LDI;
@@ -101,12 +121,23 @@ class CPU {
         opIndex[MUL] = execute_MUL;
         opIndex[PUSH] = execute_PUSH;
         opIndex[POP] = execute_POP;
-
-        opIndex[IR]();
-
-        const operandCount = IR >>> 6
-        this.reg.PC++;
-        this.reg.PC += operandCount;
+        opIndex[CALL] = execute_CALL;
+        opIndex[RET] = execute_RET;
+        opIndex[ADD] = execute_ADD;
+        if (!opIndex[IR]) {
+            console.log("Received a malformed instruction: ", IR.toString(2));
+            this.stopClock();
+        }
+        console.log("About to carry out this instruction: ", IR.toString(2));
+        const addressToGoTo = opIndex[IR]();
+        
+        if (addressToGoTo) {
+            this.reg.PC = addressToGoTo;
+        } else {
+            const operandCount = IR >>> 6
+            this.reg.PC++;
+            this.reg.PC += operandCount;
+        }
     }
 }
 
