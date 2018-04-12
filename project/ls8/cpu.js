@@ -88,7 +88,7 @@ class CPU {
             this.ram.write(this.reg[SP], this.reg[operandA]);
         };
         const execute_POP = () => {
-            const val = this.ram.read(this.reg[sp]);
+            const val = this.ram.read(this.reg[SP]);
             this.alu('INC', SP);
             this.reg[operandA] = val;
             return;
